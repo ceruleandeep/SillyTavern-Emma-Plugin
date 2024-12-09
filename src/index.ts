@@ -96,9 +96,13 @@ export async function init(router: Router): Promise<void> {
         } catch (error) {
             console.error(chalk.red(MODULE_NAME), 'Failed to execute command:', error);
             // Return the error message to the client
+            const errorDetails = error instanceof Error 
+                ? error.message
+                : (error as { stderr?: string })?.stderr || 'Unknown error';
+            
             return res.status(500).json({
                 error: 'Failed to execute command',
-                details: error.stderr || error.message,
+                details: errorDetails,
             });
         }
     });
