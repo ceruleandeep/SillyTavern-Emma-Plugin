@@ -5,9 +5,10 @@
     "main": "dist/plugin.js",
     "type": "commonjs",
     "scripts": {
+        "watch:dev": "webpack --mode development --watch",
         "build:dev": "webpack --mode development",
+        "watch": "webpack --mode production --watch",
         "build": "webpack --mode production",
-        "watch": "webpack --mode development --watch",
         "lint": "eslint .",
         "lint:fix": "eslint --fix ."
     },
