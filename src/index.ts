@@ -133,6 +133,7 @@ export async function init(router: Router): Promise<void> {
                 description: 'A new extension',
                 author,
                 license: 'MIT',
+                loading_order: 10,
             };
             fs.writeFileSync(
                 path.join(extensionPath, 'manifest.json'),

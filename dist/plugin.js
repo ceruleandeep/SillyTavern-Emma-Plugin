@@ -10717,6 +10717,7 @@ function init(router) {
                     description: 'A new extension',
                     author,
                     license: 'MIT',
+                    loading_order: 10,
                 };
                 node_fs_1.default.writeFileSync(node_path_1.default.join(extensionPath, 'manifest.json'), JSON.stringify(manifest, null, 2));
                 // Create index.js
