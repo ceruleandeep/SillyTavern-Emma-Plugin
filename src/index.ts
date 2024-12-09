@@ -3,7 +3,7 @@ import { Router } from 'express';
 import { Chalk } from 'chalk';
 import path from 'node:path';
 import fs from 'node:fs';
-import { exec } from 'child_process';
+import { exec, execSync } from 'child_process';
 import { promisify } from 'util';
 import { PUBLIC_DIRECTORIES } from './constants';
 
@@ -133,6 +133,11 @@ export async function init(router: Router): Promise<void> {
             // Create index.js
             const indexContent = '// Extension code goes here\n';
             fs.writeFileSync(path.join(extensionPath, 'index.js'), indexContent);
+
+            // Initialize git repository
+            execSync('git init', { cwd: extensionPath });
+            execSync('git add .', { cwd: extensionPath });
+            execSync('git commit -m "Initial commit"', { cwd: extensionPath });
 
             console.log(chalk.green(MODULE_NAME), `Created new extension "${name}" at ${extensionPath}`);
             return res.json({
