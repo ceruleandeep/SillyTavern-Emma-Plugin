@@ -7,6 +7,10 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import { PUBLIC_DIRECTORIES } from './constants';
 
+// List of allowed editor commands
+const ALLOWED_EDITORS = ['webstorm', 'code', 'open'] as const;
+type EditorCommand = typeof ALLOWED_EDITORS[number];
+
 interface PluginInfo {
     id: string;
     name: string;
@@ -43,9 +47,11 @@ export async function init(router: Router): Promise<void> {
         }
     });
 
-    // List of allowed editor commands
-    const ALLOWED_EDITORS = ['webstorm', 'code', 'open'] as const;
-    type EditorCommand = typeof ALLOWED_EDITORS[number];
+
+    // Get list of allowed editors
+    router.get('/editors', (_req, res) => {
+        return res.json(ALLOWED_EDITORS);
+    });
 
     router.post('/open', jsonParser, async (req, res) => {
         try {
