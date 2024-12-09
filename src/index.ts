@@ -96,10 +96,10 @@ export async function init(router: Router): Promise<void> {
         } catch (error) {
             console.error(chalk.red(MODULE_NAME), 'Failed to execute command:', error);
             // Return the error message to the client
-            const errorDetails = error instanceof Error 
+            const errorDetails = error instanceof Error
                 ? error.message
                 : (error as { stderr?: string })?.stderr || 'Unknown error';
-            
+
             return res.status(500).json({
                 error: 'Failed to execute command',
                 details: errorDetails,
@@ -132,28 +132,28 @@ export async function init(router: Router): Promise<void> {
                 version: '1.0.0',
                 description: 'A new extension',
                 author: '',
-                license: 'MIT'
+                license: 'MIT',
             };
             fs.writeFileSync(
                 path.join(extensionPath, 'manifest.json'),
-                JSON.stringify(manifest, null, 2)
+                JSON.stringify(manifest, null, 2),
             );
 
             // Create index.js
-            const indexContent = `// Extension code goes here\n`;
+            const indexContent = '// Extension code goes here\n';
             fs.writeFileSync(path.join(extensionPath, 'index.js'), indexContent);
 
             console.log(chalk.green(MODULE_NAME), `Created new extension "${name}" at ${extensionPath}`);
             return res.json({
                 path: extensionPath,
-                manifest
+                manifest,
             });
 
         } catch (error) {
             console.error(chalk.red(MODULE_NAME), 'Failed to create extension:', error);
             return res.status(500).json({
                 error: 'Failed to create extension',
-                details: error instanceof Error ? error.message : 'Unknown error'
+                details: error instanceof Error ? error.message : 'Unknown error',
             });
         }
     });
