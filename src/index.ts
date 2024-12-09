@@ -109,10 +109,10 @@ export async function init(router: Router): Promise<void> {
 
     router.post('/create', jsonParser, async (req, res) => {
         try {
-            const { name } = req.body;
+            const { name, display_name, author } = req.body;
 
-            if (!name) {
-                return res.status(400).send('Bad Request: name is required in the request body.');
+            if (!name || !display_name || !author) {
+                return res.status(400).send('Bad Request: name, display_name, and author are required in the request body.');
             }
 
             const extensionPath = path.join(PUBLIC_DIRECTORIES.globalExtensions, name.replace(/[^a-zA-Z0-9-_]/g, ''));
@@ -128,10 +128,10 @@ export async function init(router: Router): Promise<void> {
 
             // Create manifest.json
             const manifest = {
-                name: name,
+                display_name,
                 version: '1.0.0',
                 description: 'A new extension',
-                author: '',
+                author,
                 license: 'MIT',
             };
             fs.writeFileSync(
