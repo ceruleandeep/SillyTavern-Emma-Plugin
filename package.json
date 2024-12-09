@@ -1,6 +1,6 @@
 {
     "name": "plugin-emm",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Example server plugin.",
     "main": "dist/plugin.js",
     "type": "commonjs",
