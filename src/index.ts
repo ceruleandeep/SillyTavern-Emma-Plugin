@@ -100,7 +100,7 @@ export async function init(router: Router): Promise<void> {
 
     router.post('/create', jsonParser, async (req, res) => {
         try {
-            const { name, display_name, author } = req.body;
+            const { name, display_name, author, email } = req.body;
 
             if (!name || !display_name || !author) {
                 return res.status(400).send('Bad Request: name, display_name, and author are required in the request body.');
@@ -122,7 +122,7 @@ export async function init(router: Router): Promise<void> {
                 display_name,
                 version: '1.0.0',
                 description: 'A new extension',
-                author,
+                author: email ? `${author} <${email}>` : author,
                 license: 'MIT',
                 loading_order: 10,
             };
@@ -140,7 +140,7 @@ export async function init(router: Router): Promise<void> {
             await git.cwd(extensionPath)
                 .init()
                 .addConfig('user.name', author)
-                .addConfig('user.email', `${author}@localhost`)
+                .addConfig('user.email', email || `${author}@localhost`)
                 .add('.')
                 .commit('Initial commit');
 
