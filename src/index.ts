@@ -114,7 +114,7 @@ export async function init(router: Router): Promise<void> {
             }
 
             // Create extension directory
-            fs.mkdirSync(extensionPath, { recursive: true });
+            fs.mkdirSync(extensionPath);
 
             // Create manifest.json
             const manifest = {
