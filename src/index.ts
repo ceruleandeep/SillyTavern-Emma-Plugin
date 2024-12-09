@@ -5,7 +5,7 @@ import path from 'node:path';
 import fs from 'node:fs';
 import { exec } from 'child_process';
 import { promisify } from 'util';
-import { PUBLIC_DIRECTORIES } from '../constants.js';
+import { PUBLIC_DIRECTORIES } from './constants';
 
 interface PluginInfo {
     id: string;
@@ -82,6 +82,8 @@ export async function init(router: Router): Promise<void> {
             }
 
             const execAsync = promisify(exec);
+            console.log(chalk.green(MODULE_NAME), `Opening extension "${extensionName}" with editor "${editor}"`);
+            console.debug(chalk.green(MODULE_NAME), 'Extension path:', extensionPath);
             await execAsync(`${editor} "${extensionPath}"`);
             return res.sendStatus(200);
 
