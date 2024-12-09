@@ -107,6 +107,57 @@ export async function init(router: Router): Promise<void> {
         }
     });
 
+    router.post('/create', jsonParser, async (req, res) => {
+        try {
+            const { name } = req.body;
+
+            if (!name) {
+                return res.status(400).send('Bad Request: name is required in the request body.');
+            }
+
+            const extensionPath = path.join(PUBLIC_DIRECTORIES.globalExtensions, name.replace(/[^a-zA-Z0-9-_]/g, ''));
+
+            // Check if directory already exists
+            if (fs.existsSync(extensionPath)) {
+                console.error(chalk.red(MODULE_NAME), `Extension "${name}" already exists`);
+                return res.status(409).send('Extension already exists');
+            }
+
+            // Create extension directory
+            fs.mkdirSync(extensionPath, { recursive: true });
+
+            // Create manifest.json
+            const manifest = {
+                name: name,
+                version: '1.0.0',
+                description: 'A new extension',
+                author: '',
+                license: 'MIT'
+            };
+            fs.writeFileSync(
+                path.join(extensionPath, 'manifest.json'),
+                JSON.stringify(manifest, null, 2)
+            );
+
+            // Create index.js
+            const indexContent = `// Extension code goes here\n`;
+            fs.writeFileSync(path.join(extensionPath, 'index.js'), indexContent);
+
+            console.log(chalk.green(MODULE_NAME), `Created new extension "${name}" at ${extensionPath}`);
+            return res.json({
+                path: extensionPath,
+                manifest
+            });
+
+        } catch (error) {
+            console.error(chalk.red(MODULE_NAME), 'Failed to create extension:', error);
+            return res.status(500).json({
+                error: 'Failed to create extension',
+                details: error instanceof Error ? error.message : 'Unknown error'
+            });
+        }
+    });
+
     console.log(chalk.green(MODULE_NAME), 'Plugin loaded!');
 }
 
