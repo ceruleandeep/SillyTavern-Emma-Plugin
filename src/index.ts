@@ -15,7 +15,7 @@ interface Plugin {
 }
 
 const chalk = new Chalk();
-const MODULE_NAME = '[SillyTavern-Example-Plugin]';
+const MODULE_NAME = '[SillyTavern-ExtensionsManagerManager-Plugin]';
 
 /**
  * Initialize the plugin.
@@ -24,7 +24,7 @@ const MODULE_NAME = '[SillyTavern-Example-Plugin]';
 export async function init(router: Router): Promise<void> {
     const jsonParser = bodyParser.json();
     // Used to check if the server plugin is running
-    router.post('/probe', (_req, res) => {
+    router.get('/probe', (_req, res) => {
         return res.sendStatus(204);
     });
     // Use body-parser to parse the request body
@@ -46,8 +46,8 @@ export async function exit(): Promise<void> {
 }
 
 export const info: PluginInfo = {
-    id: 'example',
-    name: 'Example Plugin',
+    id: 'emm',
+    name: 'Extensions Manager Manager Plugin',
     description: 'A simple example plugin for SillyTavern server.',
 };
 
