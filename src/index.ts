@@ -159,7 +159,7 @@ export async function exit(): Promise<void> {
 export const info: PluginInfo = {
     id: 'emm',
     name: 'Extensions Manager Manager Plugin',
-    description: 'A simple example plugin for SillyTavern server.',
+    description: 'A simple plugin for SillyTavern server.',
 };
 
 const plugin: Plugin = {

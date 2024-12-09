@@ -10636,17 +10636,6 @@ function init(router) {
         router.get('/probe', (_req, res) => {
             return res.sendStatus(204);
         });
-        // Use body-parser to parse the request body
-        router.post('/ping', jsonParser, (req, res) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { message } = req.body;
-                return res.json({ message: `Pong! ${message}` });
-            }
-            catch (error) {
-                console.error(chalk.red(MODULE_NAME), 'Request failed', error);
-                return res.status(500).send('Internal Server Error');
-            }
-        }));
         // Get list of allowed editors
         router.get('/editors', (_req, res) => {
             return res.json(ALLOWED_EDITORS);
@@ -10709,7 +10698,7 @@ function init(router) {
                     return res.status(409).send('Extension already exists');
                 }
                 // Create extension directory
-                node_fs_1.default.mkdirSync(extensionPath, { recursive: true });
+                node_fs_1.default.mkdirSync(extensionPath);
                 // Create manifest.json
                 const manifest = {
                     display_name,
@@ -10750,7 +10739,7 @@ exports.exit = exit;
 exports.info = {
     id: 'emm',
     name: 'Extensions Manager Manager Plugin',
-    description: 'A simple example plugin for SillyTavern server.',
+    description: 'A simple plugin for SillyTavern server.',
 };
 const plugin = {
     init,
