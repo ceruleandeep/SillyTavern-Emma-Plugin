@@ -135,10 +135,12 @@ export async function init(router: Router): Promise<void> {
             const indexContent = '// Extension code goes here\n';
             fs.writeFileSync(path.join(extensionPath, 'index.js'), indexContent);
 
-            // Initialize git repository
+            // Initialize git repository with author info
             const git = simpleGit();
             await git.cwd(extensionPath)
                 .init()
+                .addConfig('user.name', author)
+                .addConfig('user.email', `${author}@localhost`)
                 .add('.')
                 .commit('Initial commit');
 
