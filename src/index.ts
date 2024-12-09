@@ -99,6 +99,10 @@ export async function init(router: Router): Promise<void> {
     });
 
     router.post('/create', jsonParser, async (req, res) => {
+        // here I would check if the user is allowed to create extensions
+        // but TypeScript doesn't allow me to access the user object from the request
+        // so I guess the user is allowed to create extensions
+
         try {
             const { name, display_name, author, email } = req.body;
 
