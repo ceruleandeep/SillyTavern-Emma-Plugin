@@ -32,21 +32,11 @@ const MODULE_NAME = '[SillyTavern-ExtensionsManagerManager-Plugin]';
  */
 export async function init(router: Router): Promise<void> {
     const jsonParser = bodyParser.json();
+
     // Used to check if the server plugin is running
     router.get('/probe', (_req, res) => {
         return res.sendStatus(204);
     });
-    // Use body-parser to parse the request body
-    router.post('/ping', jsonParser, async (req, res) => {
-        try {
-            const { message } = req.body;
-            return res.json({ message: `Pong! ${message}` });
-        } catch (error) {
-            console.error(chalk.red(MODULE_NAME), 'Request failed', error);
-            return res.status(500).send('Internal Server Error');
-        }
-    });
-
 
     // Get list of allowed editors
     router.get('/editors', (_req, res) => {
