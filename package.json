@@ -1,5 +1,5 @@
 {
-    "name": "plugin-emm",
+    "name": "plugin-emma",
     "version": "1.0.1",
     "description": "Example server plugin.",
     "main": "dist/plugin.js",
@@ -14,14 +14,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/ceruleandeep/SillyTavern-ExtensionsManagerManager-Plugin.git"
+        "url": "git+https://github.com/ceruleandeep/SillyTavern-Emma-Plugin.git"
     },
     "author": "ceruleandeep",
     "license": "AGPL-3.0-or-later",
     "bugs": {
         "url": "https://github.com/SillyTavern/Plugin-WebpackTemplate/issues"
     },
-    "homepage": "https://github.com/ceruleandeep/SillyTavern-ExtensionsManagerManager-Plugin#readme",
+    "homepage": "https://github.com/ceruleandeep/SillyTavern-Emma-Plugin#readme",
     "devDependencies": {
         "@eslint/js": "^9.0.0",
         "@types/express": "^4.17.21",

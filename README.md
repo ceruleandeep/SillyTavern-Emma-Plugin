@@ -1,6 +1,6 @@
-# SillyTavern-ExtensionsManagerManager-Plugin
+# SillyTavern-Emma-Plugin
 
-Server-side plugin for [SillyTavern-ExtensionsManagerManager](https://github.com/ceruleandeep/SillyTavern-ExtensionsManagerManager/)
+Server-side plugin for [SillyTavern-Emma](https://github.com/ceruleandeep/SillyTavern-Emma/)
 
 ## Installation
 

@@ -25,7 +25,7 @@ interface Plugin {
 }
 
 const chalk = new Chalk();
-const MODULE_NAME = '[SillyTavern-ExtensionsManagerManager-Plugin]';
+const MODULE_NAME = '[SillyTavern-Emma-Plugin]';
 
 /**
  * Initialize the plugin.
@@ -171,9 +171,9 @@ export async function exit(): Promise<void> {
 }
 
 export const info: PluginInfo = {
-    id: 'emm',
-    name: 'Extensions Manager Manager Plugin',
-    description: 'A simple plugin for SillyTavern server.',
+    id: 'emma',
+    name: 'Emma Plugin',
+    description: 'Helper plugin for Emma',
 };
 
 const plugin: Plugin = {
