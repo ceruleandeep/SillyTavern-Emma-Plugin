@@ -9,7 +9,7 @@ import { promisify } from 'util';
 import { PUBLIC_DIRECTORIES } from './constants';
 
 // List of allowed editor commands
-const ALLOWED_EDITORS = ['webstorm', 'code', 'open'] as const;
+const ALLOWED_EDITORS = ['code', 'webstorm', 'atom', 'sublime', 'notepad++'] as const;
 type EditorCommand = typeof ALLOWED_EDITORS[number];
 
 interface PluginInfo {
