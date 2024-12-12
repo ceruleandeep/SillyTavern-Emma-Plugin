@@ -127,8 +127,8 @@ export async function init(router: Router): Promise<void> {
                 license: 'MIT',
                 loading_order: 10,
                 ...(githubUsername && {
-                    homepage: `https://github.com/${githubUsername}/${name}`
-                })
+                    homepage: `https://github.com/${githubUsername}/${name}`,
+                }),
             };
             fs.writeFileSync(
                 path.join(extensionPath, 'manifest.json'),
