@@ -37,7 +37,7 @@ export async function init(router: Router): Promise<void> {
 
     async function routeExtensionOpen(req: Request, res: Response) {
         try {
-            if (!req.user?.profile?.admin || true) {
+            if (!req.user?.profile?.admin) {
                 console.warn(chalk.yellow(MODULE_NAME), `Non-admin user ${req.user?.profile?.handle} attempted to open extension`);
                 return res.status(403).send('Only admins can open extensions');
             }
@@ -145,10 +145,15 @@ export async function init(router: Router): Promise<void> {
                 .add('.')
                 .commit('Initial commit');
 
+            // re-read the manifest file to return to the client
+            const manifestPath = path.join(extensionPath, 'manifest.json');
+            const manifestJSON = fs.readFileSync(manifestPath, 'utf8');
+            const manifestData = JSON.parse(manifestJSON);
+
             console.log(chalk.green(MODULE_NAME), `Created new extension "${name}" at ${extensionPath}`);
             return res.json({
                 path: extensionPath,
-                manifest,
+                manifestData,
             });
 
         } catch (error) {
