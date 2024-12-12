@@ -164,6 +164,22 @@ export async function init(router: Router): Promise<void> {
                 readmeContent,
             );
 
+            // Read and process index.js template
+            let indexContent = await fs.promises.readFile(
+                path.join(PLUGIN_DIRECTORIES.skeletons, 'index.js'),
+                'utf8',
+            );
+
+            // Replace template variables in index.js
+            indexContent = indexContent
+                .replace(/MyExtension/g, name)
+                .replace(/My Extension/g, display_name);
+
+            await fs.promises.writeFile(
+                path.join(extensionPath, 'index.js'),
+                indexContent,
+            );
+
             // Create manifest.json
             const manifest = {
                 display_name,
