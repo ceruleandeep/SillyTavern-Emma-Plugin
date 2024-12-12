@@ -44,8 +44,8 @@ const serverConfig = {
                     to: 'skeletons',
                     transform: {
                         transformer: (content) => content,
-                        cache: true
-                    }
+                        cache: true,
+                    },
                 },
             ],
         }),
