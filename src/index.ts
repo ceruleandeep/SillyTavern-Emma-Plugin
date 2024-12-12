@@ -9,6 +9,10 @@ import { promisify } from 'util';
 import { PUBLIC_DIRECTORIES } from './constants';
 import type { PluginInfo, Plugin } from './types/types';
 
+const GITHUB_NAME_REGEX = /^[\w\.-]+$/;
+const GITHUB_USERNAME_MAX_LENGTH = 39;
+const GITHUB_REPO_MAX_LENGTH = 100;
+
 const chalk = new Chalk();
 const MODULE_NAME = '[SillyTavern-Emma-Plugin]';
 
@@ -105,6 +109,21 @@ export async function init(router: Router): Promise<void> {
 
             if (!name || !display_name || !author) {
                 return res.status(400).send('Bad Request: name, display_name, and author are required in the request body.');
+            }
+
+            if (githubUsername) {
+                if (!GITHUB_NAME_REGEX.test(githubUsername)) {
+                    return res.status(400).send('Invalid GitHub username format. Must contain only letters, numbers, hyphens, dots, and underscores.');
+                }
+                if (githubUsername.length > GITHUB_USERNAME_MAX_LENGTH) {
+                    return res.status(400).send(`GitHub username must not exceed ${GITHUB_USERNAME_MAX_LENGTH} characters.`);
+                }
+                if (!GITHUB_NAME_REGEX.test(name)) {
+                    return res.status(400).send('Invalid repository name format. Must contain only letters, numbers, hyphens, dots, and underscores.');
+                }
+                if (name.length > GITHUB_REPO_MAX_LENGTH) {
+                    return res.status(400).send(`Repository name must not exceed ${GITHUB_REPO_MAX_LENGTH} characters.`);
+                }
             }
 
             const extensionPath = path.join(PUBLIC_DIRECTORIES.globalExtensions, name.replace(/[^a-zA-Z0-9-_]/g, ''));
