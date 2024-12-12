@@ -7,44 +7,7 @@ import { exec } from 'child_process';
 import simpleGit from 'simple-git';
 import { promisify } from 'util';
 import { PUBLIC_DIRECTORIES } from './constants';
-
-export interface UserProfile {
-    handle: string;
-    name: string;
-    created: number;
-    password: string;
-    admin: boolean;
-    enabled: boolean;
-    salt: string;
-}
-
-export interface UserDirectories {
-    extensions: string;
-}
-
-export interface User {
-    profile: UserProfile;
-    directories: UserDirectories;
-}
-
-// Extend the Express Request type
-declare module 'express' {
-  interface Request {
-    user?: User;
-  }
-}
-
-interface PluginInfo {
-    id: string;
-    name: string;
-    description: string;
-}
-
-interface Plugin {
-    init: (router: Router) => Promise<void>;
-    exit: () => Promise<void>;
-    info: PluginInfo;
-}
+import type { PluginInfo, Plugin } from './types/types';
 
 const chalk = new Chalk();
 const MODULE_NAME = '[SillyTavern-Emma-Plugin]';
@@ -74,9 +37,9 @@ export async function init(router: Router): Promise<void> {
 
     async function routeExtensionOpen(req: Request, res: Response) {
         try {
-            if (!req.user?.profile?.admin) {
+            if (!req.user?.profile?.admin || true) {
                 console.warn(chalk.yellow(MODULE_NAME), `Non-admin user ${req.user?.profile?.handle} attempted to open extension`);
-                return res.status(403).send('Forbidden');
+                return res.status(403).send('Only admins can open extensions');
             }
 
             const { editor = 'webstorm', extensionName } = req.body;
@@ -135,7 +98,7 @@ export async function init(router: Router): Promise<void> {
         try {
             if (!req.user?.profile?.admin) {
                 console.warn(chalk.yellow(MODULE_NAME), `Non-admin user ${req.user?.profile?.handle} attempted to create extension`);
-                return res.status(403).send('Forbidden');
+                return res.status(403).send('Only admins can create extensions');
             }
 
             const { name, display_name, author, email } = req.body;
