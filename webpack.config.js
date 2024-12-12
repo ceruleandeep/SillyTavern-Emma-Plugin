@@ -46,6 +46,9 @@ const serverConfig = {
                         transformer: (content) => content,
                         cache: true,
                     },
+                    info: {
+                        minimized: true // Prevents webpack from trying to minimize these files
+                    }
                 },
             ],
         }),
