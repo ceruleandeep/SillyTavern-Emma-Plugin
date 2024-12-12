@@ -171,7 +171,11 @@ export async function init(router: Router): Promise<void> {
             );
 
             // Replace template variables in index.js
-            const sanitizedName = name.replace(/[^a-zA-Z0-9-_]/g, '');
+            // Ensure valid TypeScript type name:
+            // Must start with letter/underscore, can contain letters/numbers/underscores
+            const sanitizedName = name
+                .replace(/[^a-zA-Z0-9_]/g, '') // Remove invalid chars
+                .replace(/^[0-9]/, '_$&');     // Prepend _ if starts with number
             indexContent = indexContent
                 .replace(/MyExtension/g, sanitizedName)
                 .replace(/My Extension/g, display_name);
