@@ -140,27 +140,27 @@ export async function init(router: Router): Promise<void> {
             // Copy skeleton files
             await fs.promises.copyFile(
                 path.join(PLUGIN_DIRECTORIES.skeletons, 'index.js'),
-                path.join(extensionPath, 'index.js')
+                path.join(extensionPath, 'index.js'),
             );
             await fs.promises.copyFile(
                 path.join(PLUGIN_DIRECTORIES.skeletons, 'LICENSE'),
-                path.join(extensionPath, 'LICENSE')
+                path.join(extensionPath, 'LICENSE'),
             );
 
             // Read and process README template
             let readmeContent = await fs.promises.readFile(
                 path.join(PLUGIN_DIRECTORIES.skeletons, 'README.md'),
-                'utf8'
+                'utf8',
             );
-            
+
             // Replace template variables in README
             readmeContent = readmeContent
                 .replace(/username/g, githubUsername || 'your-username')
                 .replace(/ExtensionName/g, name);
-            
+
             await fs.promises.writeFile(
                 path.join(extensionPath, 'README.md'),
-                readmeContent
+                readmeContent,
             );
 
             // Create manifest.json
@@ -177,7 +177,7 @@ export async function init(router: Router): Promise<void> {
             };
             await fs.promises.writeFile(
                 path.join(extensionPath, 'manifest.json'),
-                JSON.stringify(manifest, null, 2)
+                JSON.stringify(manifest, null, 2),
             );
 
             // Initialize git repository with author info
