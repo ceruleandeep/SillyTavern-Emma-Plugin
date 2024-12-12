@@ -170,6 +170,7 @@ export async function init(router: Router): Promise<void> {
                 description: 'A new extension',
                 author: email ? `${author} <${email}>` : author,
                 license: 'AGPL-3.0',
+                'js': 'index.js',
                 loading_order: 10,
                 ...(githubUsername && {
                     homepage: `https://github.com/${githubUsername}/${name}`,
