@@ -171,8 +171,9 @@ export async function init(router: Router): Promise<void> {
             );
 
             // Replace template variables in index.js
+            const sanitizedName = name.replace(/[^a-zA-Z0-9-_]/g, '');
             indexContent = indexContent
-                .replace(/MyExtension/g, name)
+                .replace(/MyExtension/g, sanitizedName)
                 .replace(/My Extension/g, display_name);
 
             await fs.promises.writeFile(
