@@ -39,9 +39,13 @@ const serverConfig = {
     plugins: [
         new CopyPlugin({
             patterns: [
-                { 
+                {
                     from: 'src/skeletons',
-                    to: 'skeletons'
+                    to: 'skeletons',
+                    transform: {
+                        transformer: (content) => content,
+                        cache: true
+                    }
                 },
             ],
         }),
