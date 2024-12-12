@@ -1,5 +1,6 @@
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const serverConfig = {
     devtool: false,
@@ -35,7 +36,16 @@ const serverConfig = {
             }),
         ],
     },
-    plugins: [],
+    plugins: [
+        new CopyPlugin({
+            patterns: [
+                { 
+                    from: 'src/skeletons',
+                    to: 'skeletons'
+                },
+            ],
+        }),
+    ],
 };
 
 module.exports = [serverConfig];

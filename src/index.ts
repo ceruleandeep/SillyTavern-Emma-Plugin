@@ -137,6 +137,32 @@ export async function init(router: Router): Promise<void> {
             // Create extension directory
             fs.mkdirSync(extensionPath);
 
+            // Copy skeleton files
+            await fs.promises.copyFile(
+                path.join(PLUGIN_DIRECTORIES.skeletons, 'index.js'),
+                path.join(extensionPath, 'index.js')
+            );
+            await fs.promises.copyFile(
+                path.join(PLUGIN_DIRECTORIES.skeletons, 'LICENSE'),
+                path.join(extensionPath, 'LICENSE')
+            );
+
+            // Read and process README template
+            let readmeContent = await fs.promises.readFile(
+                path.join(PLUGIN_DIRECTORIES.skeletons, 'README.md'),
+                'utf8'
+            );
+            
+            // Replace template variables in README
+            readmeContent = readmeContent
+                .replace(/username/g, githubUsername || 'your-username')
+                .replace(/ExtensionName/g, name);
+            
+            await fs.promises.writeFile(
+                path.join(extensionPath, 'README.md'),
+                readmeContent
+            );
+
             // Create manifest.json
             const manifest = {
                 display_name,
@@ -149,14 +175,10 @@ export async function init(router: Router): Promise<void> {
                     homepage: `https://github.com/${githubUsername}/${name}`,
                 }),
             };
-            fs.writeFileSync(
+            await fs.promises.writeFile(
                 path.join(extensionPath, 'manifest.json'),
-                JSON.stringify(manifest, null, 2),
+                JSON.stringify(manifest, null, 2)
             );
-
-            // Create index.js
-            const indexContent = '// Extension code goes here\n';
-            fs.writeFileSync(path.join(extensionPath, 'index.js'), indexContent);
 
             // Initialize git repository with author info
             const git = simpleGit();
