@@ -155,7 +155,8 @@ export async function init(router: Router): Promise<void> {
 
             // Replace template variables in README
             readmeContent = readmeContent
-                .replace(/username/g, githubUsername || 'your-username')
+                .replace(/your-username/g, githubUsername || 'your-username')
+                .replace(/SillyTavern Extension Example/g, display_name)
                 .replace(/ExtensionName/g, name);
 
             await fs.promises.writeFile(
