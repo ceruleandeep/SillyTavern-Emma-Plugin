@@ -1,5 +1,17 @@
 // noinspection DuplicatedCode
 
+/*
+Starter code for a SillyTavern extension. This code will be executed in the context of
+the SillyTavern page. You can access the SillyTavern API via SillyTavern.getContext().
+
+This sample extension adds a settings drawer to the extensions settings page, allowing
+the user to enable/disable the extension. It also listens for chat change events and
+shows a notification ("toast") when the chat changes, if the extension is enabled.
+
+This code is adapted from the Inject Manager extension. See the full extension here:
+https://github.com/SillyTavern/Extension-InjectManager
+*/
+
 const settingsKey = 'MyExtension';
 const EXTENSION_NAME = 'My Extension';
 
@@ -54,7 +66,6 @@ function renderExtensionSettings() {
     enabledCheckbox.addEventListener('change', () => {
         settings.enabled = enabledCheckbox.checked;
         context.saveSettingsDebounced();
-        renderElement(true);
     });
     const enabledCheckboxText = document.createElement('span');
     enabledCheckboxText.textContent = context.t`Enabled`;
@@ -78,6 +89,9 @@ function renderExtensionSettings() {
     }
 
     context.eventSource.on(context.eventTypes.CHAT_CHANGED, () => {
+        if (!context.extensionSettings[settingsKey].enabled) {
+            return;
+        }
         toastr.info(context.t`Chat changed`, EXTENSION_NAME);
     });
 
