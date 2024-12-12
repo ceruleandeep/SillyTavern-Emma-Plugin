@@ -1,5 +1,5 @@
 import bodyParser from 'body-parser';
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import { Chalk } from 'chalk';
 import path from 'node:path';
 import fs from 'node:fs';
@@ -8,9 +8,31 @@ import simpleGit from 'simple-git';
 import { promisify } from 'util';
 import { PUBLIC_DIRECTORIES } from './constants';
 
-// List of allowed editor commands
-const ALLOWED_EDITORS = ['code', 'webstorm', 'atom', 'sublime', 'notepad++'] as const;
-type EditorCommand = typeof ALLOWED_EDITORS[number];
+export interface UserProfile {
+    handle: string;
+    name: string;
+    created: number;
+    password: string;
+    admin: boolean;
+    enabled: boolean;
+    salt: string;
+}
+
+export interface UserDirectories {
+    extensions: string;
+}
+
+export interface User {
+    profile: UserProfile;
+    directories: UserDirectories;
+}
+
+// Extend the Express Request type
+declare module 'express' {
+  interface Request {
+    user?: User;
+  }
+}
 
 interface PluginInfo {
     id: string;
@@ -27,25 +49,36 @@ interface Plugin {
 const chalk = new Chalk();
 const MODULE_NAME = '[SillyTavern-Emma-Plugin]';
 
-/**
- * Initialize the plugin.
- * @param router Express Router
- */
+// List of allowed editor commands
+const ALLOWED_EDITORS = ['code', 'webstorm', 'atom', 'sublime', 'notepad++'] as const;
+type EditorCommand = typeof ALLOWED_EDITORS[number];
+
 export async function init(router: Router): Promise<void> {
     const jsonParser = bodyParser.json();
 
     // Used to check if the server plugin is running
-    router.get('/probe', (_req, res) => {
+    router.get('/probe', routeProbe);
+    router.get('/editors', routeEditorsList);
+    router.post('/open', jsonParser, routeExtensionOpen);
+    router.post('/create', jsonParser, routeExtensionCreate);
+
+    function routeProbe(req: Request, res: Response) {
+        const isAdmin = req.user?.profile?.admin;
+        console.log(chalk.green(MODULE_NAME), `Probe request received from ${req.user?.profile?.handle} (admin: ${isAdmin})`);
         return res.sendStatus(204);
-    });
+    }
 
-    // Get list of allowed editors
-    router.get('/editors', (_req, res) => {
+    function routeEditorsList(_req: Request, res: Response) {
         return res.json(ALLOWED_EDITORS);
-    });
+    }
 
-    router.post('/open', jsonParser, async (req, res) => {
+    async function routeExtensionOpen(req: Request, res: Response) {
         try {
+            if (!req.user?.profile?.admin) {
+                console.warn(chalk.yellow(MODULE_NAME), `Non-admin user ${req.user?.profile?.handle} attempted to open extension`);
+                return res.status(403).send('Forbidden');
+            }
+
             const { editor = 'webstorm', extensionName } = req.body;
 
             if (!extensionName) {
@@ -96,14 +129,15 @@ export async function init(router: Router): Promise<void> {
                 details: errorDetails,
             });
         }
-    });
+    }
 
-    router.post('/create', jsonParser, async (req, res) => {
-        // here I would check if the user is allowed to create extensions
-        // but TypeScript doesn't allow me to access the user object from the request
-        // so I guess the user is allowed to create extensions
-
+    async function routeExtensionCreate(req: Request, res: Response) {
         try {
+            if (!req.user?.profile?.admin) {
+                console.warn(chalk.yellow(MODULE_NAME), `Non-admin user ${req.user?.profile?.handle} attempted to create extension`);
+                return res.status(403).send('Forbidden');
+            }
+
             const { name, display_name, author, email } = req.body;
 
             if (!name || !display_name || !author) {
@@ -161,7 +195,7 @@ export async function init(router: Router): Promise<void> {
                 details: error instanceof Error ? error.message : 'Unknown error',
             });
         }
-    });
+    }
 
     console.log(chalk.green(MODULE_NAME), 'Plugin loaded!');
 }
