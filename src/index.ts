@@ -101,7 +101,7 @@ export async function init(router: Router): Promise<void> {
                 return res.status(403).send('Only admins can create extensions');
             }
 
-            const { name, display_name, author, email } = req.body;
+            const { name, display_name, author, email, githubUsername } = req.body;
 
             if (!name || !display_name || !author) {
                 return res.status(400).send('Bad Request: name, display_name, and author are required in the request body.');
@@ -126,6 +126,9 @@ export async function init(router: Router): Promise<void> {
                 author: email ? `${author} <${email}>` : author,
                 license: 'MIT',
                 loading_order: 10,
+                ...(githubUsername && {
+                    homepage: `https://github.com/${githubUsername}/${name}`
+                })
             };
             fs.writeFileSync(
                 path.join(extensionPath, 'manifest.json'),
