@@ -15,7 +15,7 @@ Install with the SillyTavern [Extension Manager](https://docs.sillytavern.app/ex
 Paste the following URL into the "Install from URL" field:
 
 ```
-https://github.com/username/SillyTavern-MyExtension
+https://github.com/your-username/SillyTavern-MyExtension
 ```
 
 ### Usage
@@ -36,4 +36,4 @@ https://github.com/username/SillyTavern-MyExtension
 
 ## License
 
-*Be cool, use an open source license.*
+*Be cool, use an open source license. AGPL-3.0 provided for your convenience.*
