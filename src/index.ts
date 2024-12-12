@@ -9,7 +9,7 @@ import { promisify } from 'util';
 import { PUBLIC_DIRECTORIES } from './constants';
 import type { PluginInfo, Plugin } from './types/types';
 
-const GITHUB_NAME_REGEX = /^[\w\.-]+$/;
+const GITHUB_NAME_REGEX = /^[\w.-]+$/;
 const GITHUB_USERNAME_MAX_LENGTH = 39;
 const GITHUB_REPO_MAX_LENGTH = 100;
 
